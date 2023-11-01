@@ -1,0 +1,97 @@
+﻿@model OrderViewModel
+
+<h1>Checkout</h1>
+
+<form class="row gap-3" asp-controller="Checkout" asp-action="Checkout" method="post">
+    <div class="col-4 form-control-lg">
+        <div class="input-group-lg d-flex flex-column">
+            <label>FirstName</label>
+            <input placeholder="FirstName" class="input-field" asp-for="Order.FirstName" required />
+            <div class="invalid-feedback">First Name is required.</div>
+        </div>
+
+        <div class="input-group-lg d-flex flex-column">
+            <label>LastName</label>
+            <input placeholder="LastName" class="input-field" asp-for="Order.LastName" required />
+            <div class="invalid-feedback">Last Name is required.</div>
+        </div>
+
+        <div class="input-group-lg d-flex flex-column">
+            <label>Address</label>
+            <input placeholder="Address" class="input-field" asp-for="Order.ShippingAddress" required />
+            <div class="invalid-feedback">Address is required.</div>
+        </div>
+
+        <label>Payment Method:</label>
+        <div class="form-control-lg bg-white">
+            <input placeholder="Address" type="checkbox" checked disabled value="delivery" asp-for="Order.PaymentMethod" />
+            <label>Pay On Delivery</label>
+        </div>
+       @* <div class=" input-group-lg d-flex flex-column">
+            <label>Order Notes</label>
+            <textarea class="input-field" placeholder="Wrap as a gift..." asp-for="Order.OrderNotes"></textarea>
+        </div>*@
+        <div class="form-check">
+            <input type="checkbox" id="orderPaymentMethod" checked disabled asp-for="Order.PaymentMethod" class="form-check-input">
+            <label for="orderPaymentMethod" class="form-check-label">Pay On Delivery</label>
+        </div>
+        <div>
+            <button type="submit" class="btn btn-success mt-2">Place Order</button>
+        </div>
+    </div>
+
+    <div class="col-7">
+        @if (Model.CartViewModel.CartItems.Count > 0)
+        {
+            <table class="table">
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Price</th>
+                </tr>
+                @foreach (var item in Model.CartViewModel.CartItems)
+                {
+                    <tr>
+                        <td>@item.ProductName</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Price.ToString("C2")</td>
+                        <td>@Model.CartViewModel.CartItems.Where(x => x.ProductId == item.ProductId).Sum(x => x.Quantity * x.Price).ToString("C2")</td>
+                    </tr>
+                }
+                <tr>
+                    <td class="text-right" colspan="1">Grand Total: @Model.CartViewModel.GrandTotal.ToString("C2")</td>
+                </tr>
+
+            </table>
+        }
+        else
+        {
+            <h3 class="display-4 text-center">Your cart is empty.</h3>
+        }
+    </div>
+</form>
+<link href="~/css/index.css" rel="stylesheet" />
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var form = document.querySelector("form");
+        var inputFields = form.querySelectorAll(".input-field");
+
+        form.addEventListener("submit", function (event) {
+            var hasEmptyFields = false;
+            inputFields.forEach(function (input) {
+                if (!input.value.trim()) {
+                    hasEmptyFields = true;
+                    input.nextElementSibling.style.display = "block";
+                } else {
+                    input.nextElementSibling.style.display = "none";
+                }
+            });
+
+            if (hasEmptyFields) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>

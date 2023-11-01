@@ -1,0 +1,114 @@
+﻿@using CmsShoppingCart.Models.ViewModels;
+@model AdminViewModel
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-8">
+            <div id="chartContainer" style="height: 370px;"></div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card bg-info bg-opacity-50 rounded-3 p-3">
+                <h4 class="mb-4">
+                    Best Selling:
+                    @if (Model.WinningProduct != null && !string.IsNullOrEmpty(Model.WinningProduct.Name))
+                    {
+                        <span class="text-danger">@Model.WinningProduct.Name</span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">No data available</span>
+                    }
+                </h4>
+
+                <h6>Total</h6>
+                @if (Model.NumberOfProductSold != null)
+                {
+                    @Model.NumberOfProductSold
+                }
+                else
+                {
+                    <div>No data available</div>
+                }
+            </div>
+
+            <div class="card bg-primary bg-opacity-50 rounded-3 p-3 mt-4">
+                <h4>Total Revenue:</h4>
+                @if (Model.TotalRevenue != null)
+                {
+                    <div>@Model.TotalRevenue $</div>
+                }
+                else
+                {
+                    <div>No data available</div>
+                }
+            </div>
+
+            @*<div class="card bg-primary bg-opacity-75 rounded-3 p-3 mt-4">
+                <h4>Loyal Customer:</h4>
+                @if (Model.LoyalCustomer != null && !string.IsNullOrEmpty(Model.LoyalCustomer.UserName))
+                {
+                    <div>@Model.LoyalCustomer.UserName</div>
+                }
+                else
+                {
+                    <div>No data available</div>
+                }
+
+                <h5>Total Spent:</h5>
+                @if (Model.MaxSpent != null)
+                {
+                    <div>@Model.MaxSpent</div>
+                }
+                else
+                {
+                    <div>No data available</div>
+                }
+            </div>*@
+            <div class="card bg-primary bg-opacity-75 rounded-3 p-3 mt-4">
+                <h5>Spent:</h5>
+                @if (Model.MaxSpent != null)
+                {
+                    <div>@Model.MaxSpent $</div>
+                }
+                else
+                {
+                    <div class="no-data-available">No data available</div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@*<link rel="stylesheet" href="~/css/details.css" asp-append-version="true" />*@
+<link href="~/css/details.css" rel="stylesheet" />
+<script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+<script>
+    window.onload = function () {
+        var chart = new CanvasJS.Chart("chartContainer", {
+            theme: "light2",
+            animationEnabled: true,
+            title: {
+                text: "Sales",
+                fontColor: "#333",
+            },
+            axisX: {
+                title: "Orders",
+                titleFontColor: "#333",
+            },
+            axisY: {
+                title: "Profit ($)",
+                titleFontColor: "#333",
+            },
+            data: [{
+                type: "line",
+                color: "#007bff",
+                markerSize: 6,
+                lineThickness: 2,
+                toolTipContent: "Orders: {x}<br>Profit: {y} $",
+                dataPoints: @Html.Raw(ViewBag.DataPoints1)
+                }]
+        });
+        chart.render();
+    }
+</script>

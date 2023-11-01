@@ -1,0 +1,20 @@
+﻿.product-details {
+    background-color: #f0f0f0; /* Set your desired background color */
+    border: 1px solid #ddd; /* Set your desired border style */
+    padding: 10px;
+    margin: 10px 0;
+}
+
+    .product-details img {
+        max-width: 100px; /* Adjust the maximum image width as needed */
+    }
+
+    .product-details h4 {
+        font-weight: bold;
+        color: #333; /* Set the desired text color */
+    }
+
+    .product-details p {
+        color: #555; /* Set the desired text color */
+        margin: 5px 0;
+    }

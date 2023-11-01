@@ -1,0 +1,123 @@
+﻿
+@model CmsShoppingCart.Models.OrderDetails
+
+<h2>Create Order Details</h2>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" class="form-control" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="LastName"></label>
+        <input asp-for="LastName" class="form-control" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PhoneNumber"></label>
+        <input asp-for="PhoneNumber" class="form-control" />
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Address"></label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="ListOrders">Back to List</a>
+</div>
+
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("form").submit(function (e) {
+                e.preventDefault(); 
+
+                $(".error-message").remove();
+
+                
+                var firstName = $("#FirstName").val();
+                var lastName = $("#LastName").val();
+                var phoneNumber = $("#PhoneNumber").val();
+                var address = $("#Address").val();
+                var isValid = true;
+
+                if (firstName.trim().length < 3) {
+                    displayErrorMessage("First Name should be at least 3 characters.", "FirstName");
+                    isValid = false;
+                }
+
+                if (lastName.trim().length < 3) {
+                    displayErrorMessage("Last Name should be at least 3 characters.", "LastName");
+                    isValid = false;
+                }
+
+                if (phoneNumber.trim() === "") {
+                    displayErrorMessage("Please enter a Phone Number.", "PhoneNumber");
+                    isValid = false;
+                } else if (!/^\d+$/.test(phoneNumber)) {
+                    displayErrorMessage("Phone Number should contain only numbers.", "PhoneNumber");
+                    isValid = false;
+                }
+
+                if (address.trim().length < 10) {
+                    displayErrorMessage("Address should be at least 10 characters.", "Address");
+                    isValid = false;
+                }
+
+                if (!isValid) {
+                    return;
+                }
+ 
+                $.ajax({
+                    type: "POST",
+                    url: "/Cart/CreateOrder", 
+                    data: $("form").serialize(),
+                    success: function (data) {
+                        /
+                        $("#form-messages").html('<div class="alert alert-success">Order created successfully.</div>');
+                        window.location.href = "/Cart/ListOrders";
+                        clearCartAndSubmitForm();
+                    },
+                    error: function (error) {
+                        
+                        $("#form-messages").html('<div class="alert alert-danger">Error creating order: ' + error.responseText + '</div>');
+                    }
+                });
+            });
+            function displayErrorMessage(message, fieldName) {
+                var errorMessage = $("<div class='text-danger error-message'>" + message + "</div>");
+                $("#" + fieldName).after(errorMessage);
+            }
+        });
+        function clearCartAndSubmitForm() {
+          
+            $.ajax({
+                type: "POST",
+                url: "/Cart/Remove", 
+                success: function () {
+                    
+                    $("form")[0].submit(); 
+                },
+                error: function (error) {
+                   
+                    alert("Error clearing cart: " + error.responseText);
+                }
+            });
+        }
+    </script>
+}

@@ -1,0 +1,21 @@
+﻿/* CSS for the form-check container */
+.form-check {
+    display: flex;
+    align-items: center;
+}
+
+/* Style for the checkbox */
+.form-check-input {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    background-color: #fff;
+    border: 2px solid #007bff; /* Change the border color to your preference */
+    border-radius: 5px;
+}
+
+/* Style for the label */
+.form-check-label {
+    font-size: 16px;
+    color: #333; /* Change the text color to your preference */
+}

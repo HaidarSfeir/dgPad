@@ -1,0 +1,195 @@
+﻿@*@model IEnumerable<Product>
+@{
+    ViewData["Title"] = "Products";
+}
+
+<h1 class="display-4 pb-5">@ViewBag.CategoryName</h1>
+
+<div class="float-right">
+    <a asp-action="OrderByPriceCategory" asp-route-sortOrder="ascending"
+       asp-route-categorySlug="@ViewBag.CategorySlug" 
+       asp-route-p="@ViewBag.PageNumber" class="btn btn-primary">
+        Sort by Price (Asc)
+    </a>
+    <a asp-action="OrderByPriceCategory" asp-route-sortOrder="descending" a
+       sp-route-categorySlug="@ViewBag.CategorySlug" asp-route-p="@ViewBag.PageNumber" 
+       class="btn btn-primary">
+        Sort by Price (Desc)
+    </a>
+</div>
+
+
+<form asp-controller="Products" asp-action="SearchByCategory" asp-route-categorySlug="@ViewBag.CategorySlug" method="get">
+    <div class="form-group">
+        <input type="text" name="searchTerm" placeholder="Search for products in this category..." class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+
+
+<div class="row">
+
+    @foreach (var item in Model)
+    {
+        <div class="col-4">
+
+            <div class="ajaxbg d-none ">
+
+                <img src="~/images/ajax-loading-1.gif" />
+                <p class="lead alert alert-success text-center d-none">
+                    The product has been added!
+                </p>
+
+            </div>
+
+
+
+            <img src="~/media/products/@item.Image" class="img-fluid" alt=""/>
+            <h4>@item.Name</h4>
+            <div>
+                @Html.Raw(item.Description)
+            </div>
+            <p>
+                @item.Price.ToString("C2")
+            </p>
+            <p>
+                <a asp-controller="Cart" asp-action="Add"
+                   asp-route-id="@item.Id" data-id="@item.Id" class="btn btn-primary addToCart"> 
+                    Add to cart
+                </a>
+                <a class="btn btn-primary text-white" asp-controller="Products" asp-action="Details" asp-route-productId="@item.Id">Details..</a>
+            </p>
+        </div>
+    }
+
+    @if (ViewBag.TotalPages > 1)
+    {
+        <div class="d-flex w-100 justify-content-center">
+            <pagination page-count="@ViewBag.TotalPages"
+            page-target="/products/@ViewBag.CategorySlug" page-number="@ViewBag.PageNumber"
+            page-range="@ViewBag.PageRange"></pagination>
+        </div>
+    }
+
+</div>
+
+
+
+
+@section Scripts{
+
+    <script>
+        $(function () {
+
+            $("a.addToCart").click(function (e) {
+                e.preventDefault();
+                let ajaxDiv = $(this).parent().parent().find("div.ajaxbg");
+                ajaxDiv.removeClass("d-none");
+
+                let id = $(this).data("id");
+
+                $.get('/cart/add/' + id, {}, function (data) {
+                    $("div.smallcart").html(data);
+                    ajaxDiv.find("img").addClass("d-none");
+                    ajaxDiv.find("p").removeClass("d-none");
+                    setTimeout(() => {
+                        ajaxDiv.animate({ opacity: 0 }, function () {
+                            $(this).addClass("d-none").fadeTo(.1, 1);
+                            $(this).find("img").removeClass("d-none");
+                            $(this).find("p").addClass("d-none");
+                        });
+                    });
+                });
+            });
+
+        });
+    </script>
+
+}
+
+*@
+
+
+@model IEnumerable<Product>
+@{
+    ViewData["Title"] = "Products";
+}
+
+<h1 class="display-4 pb-4">@ViewBag.CategoryName</h1>
+
+<div class="float-right mb-3">
+    <a asp-action="OrderByPriceCategory" asp-route-sortOrder="ascending"
+       asp-route-categorySlug="@ViewBag.CategorySlug"
+       asp-route-p="@ViewBag.PageNumber" class="btn btn-primary">Sort by Price (Asc)</a>
+    <a asp-action="OrderByPriceCategory" asp-route-sortOrder="descending"
+       asp-route-categorySlug="@ViewBag.CategorySlug"
+       asp-route-p="@ViewBag.PageNumber" class="btn btn-primary ml-2">Sort by Price (Desc)</a>
+</div>
+
+<form asp-controller="Products" asp-action="SearchByCategory" asp-route-categorySlug="@ViewBag.CategorySlug" method="get" class="mb-4">
+    <div class="input-group">
+        <input type="text" name="searchTerm" placeholder="Search for products in this category..." class="form-control" />
+        <div class="input-group-append">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </div>
+</form>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-4 mb-4">
+            <div class="ajaxbg d-none">
+                <img src="~/images/ajax-loading-1.gif" />
+                <p class="lead alert alert-success text-center d-none">The product has been added!</p>
+            </div>
+            <img src="~/media/products/@item.Image" class="img-fluid" alt="@item.Name" />
+            <h4>@item.Name</h4>
+            <div>@Html.Raw(item.Description)</div>
+            <p>@item.Price.ToString("C2")</p>
+            <p>
+                <a asp-controller="Cart" asp-action="Add"
+                   asp-route-id="@item.Id" data-id="@item.Id" class="btn btn-primary addToCart">Add to cart</a>
+                <a class="btn btn-primary text-white" asp-controller="Products" asp-action="Details" asp-route-productId="@item.Id">Details</a>
+            </p>
+        </div>
+    }
+
+    @if (ViewBag.TotalPages > 1)
+    {
+        <div class="col-12">
+            <div class="d-flex justify-content-center">
+                <pagination page-count="@ViewBag.TotalPages"
+                            page-target="/products/@ViewBag.CategorySlug"
+                            page-number="@ViewBag.PageNumber"
+                            page-range="@ViewBag.PageRange"></pagination>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts{
+    <script>
+        $(function () {
+            $("a.addToCart").click(function (e) {
+                e.preventDefault();
+                let ajaxDiv = $(this).parent().parent().find("div.ajaxbg");
+                ajaxDiv.removeClass("d-none");
+                let id = $(this).data("id");
+                $.get('/cart/add/' + id, {}, function (data) {
+                    $("div.smallcart").html(data);
+                    ajaxDiv.find("img").addClass("d-none");
+                    ajaxDiv.find("p").removeClass("d-none");
+                    setTimeout(() => {
+                        ajaxDiv.animate({ opacity: 0 }, function () {
+                            $(this).addClass("d-none").fadeTo(.1, 1);
+                            $(this).find("img").removeClass("d-none");
+                            $(this).find("p").addClass("d-none");
+                        });
+                    });
+                });
+            });
+        });
+    </script>
+}

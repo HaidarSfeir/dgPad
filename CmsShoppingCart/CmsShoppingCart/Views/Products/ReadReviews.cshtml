@@ -1,0 +1,55 @@
+﻿@model List<Review>
+
+<style>
+    .reviews-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .review-card {
+        background-color: #f3f3f3;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .review-username {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .review-body {
+        margin-top: 10px;
+    }
+
+    .review-text {
+        color: #333;
+    }
+</style>
+
+<div class="reviews-container">
+    @foreach (var review in Model)
+    {
+        <div class="review-card">
+            <div class="review-header">
+                <h5 class="review-username">@review.AppUser.UserName</h5>
+            </div>
+            <div class="review-body">
+                <h6>Review:</h6>
+                <p class="review-text">@review.body</p>
+            </div>
+            @if (User.IsInRole("Admin") || User.IsInRole("editor")){
+
+            <a class="btn background-primary" asp-controller="Products" asp-action="Delete" asp-route-id="@review.Id">Delete</a>
+            }
+
+        </div>
+    }
+</div>

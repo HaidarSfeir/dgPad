@@ -1,0 +1,114 @@
+﻿
+@model User
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1 class="text-center">Register</h1>
+            <form asp-action="Register" method="post" class="form-signin">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="UserName" class="control-label">Username</label>
+                    <input asp-for="UserName" class="form-control" placeholder="Choose a username" autofocus />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="FirstName" class="control-label">First Name</label>
+                    <input asp-for="FirstName" class="form-control" placeholder="Enter your first name" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="LastName" class="control-label">Last Name</label>
+                    <input asp-for="LastName" class="form-control" placeholder="Enter your last name" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Address" class="control-label">Address</label>
+                    <input asp-for="Address" class="form-control" placeholder="Enter your address" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label">Email</label>
+                    <input asp-for="Email" class="form-control" placeholder="Enter your email address" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label">Password</label>
+                    <div class="input-group">
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Choose a password" />
+                        <div class="input-group-append">
+                            <button type="button" id="togglePassword" class="btn btn-secondary">
+                                <span id="passwordToggleText">Show</span>
+                            </button>
+                        </div>
+                    </div>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary btn-block">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+  @*  <script>
+        $(document).ready(function () {
+            var passwordField = $("#Password");
+            var passwordToggleText = $("#passwordToggleText");
+
+            $("#togglePassword").click(function () {
+                var passwordType = passwordField.attr("type");
+
+                if (passwordType === "password") {
+                    passwordField.attr("type", "text");
+                    passwordToggleText.text("Hide");
+                } else {
+                    passwordField.attr("type", "password");
+                    passwordToggleText.text("Show");
+                }
+            });
+        });
+    </script>*@
+
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+         
+            const passwordInput = document.querySelector("input[type='password']");
+            const toggleButton = document.getElementById("togglePassword");
+            const toggleText = document.getElementById("passwordToggleText");
+
+            
+            function togglePasswordVisibility() {
+                if (passwordInput.type === "password") {
+                    passwordInput.type = "text";
+                    toggleText.textContent = "Hide";
+                } else {
+                    passwordInput.type = "password";
+                    toggleText.textContent = "Show";
+                }
+            }
+
+           
+            toggleButton.addEventListener("click", togglePasswordVisibility);
+        });
+    </script>
+
+}

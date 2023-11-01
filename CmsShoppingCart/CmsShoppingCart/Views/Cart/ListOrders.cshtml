@@ -1,0 +1,30 @@
+﻿@model List<OrderDetails>
+
+<h1>List of Orders</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Phone Number</th>
+            <th>Adress</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.FirstName</td>
+                <td>@order.LastName</td>
+                <td>@order.PhoneNumber</td>
+                <td>@order.Address</td>
+                <td>
+                    <a class="confirmDeletion" asp-action="DeleteOrder" asp-route-id="@order.Id">Delete</a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

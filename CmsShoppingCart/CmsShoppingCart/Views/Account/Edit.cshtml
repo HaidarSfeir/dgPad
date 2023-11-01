@@ -1,0 +1,88 @@
+﻿@model UserEdit
+
+<h1 class="display-4">Edit Account</h1>
+
+@using (Html.BeginForm("Edit", "Account", FormMethod.Post, new { @class = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Email)
+        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", required = "required" })
+        @Html.ValidationMessageFor(model => model.Email)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.FirstName)
+        @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", required = "required" })
+        @Html.ValidationMessageFor(model => model.FirstName)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.LastName)
+        @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", required = "required" })
+        @Html.ValidationMessageFor(model => model.LastName)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.UserName)
+        @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", required = "required" })
+        @Html.ValidationMessageFor(model => model.UserName)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Address)
+        @Html.TextBoxFor(model => model.Address, new { @class = "form-control", required = "required" })
+        @Html.ValidationMessageFor(model => model.Address)
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Password" class="control-label">Password</label>
+        <div class="input-group">
+            <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" />
+            <div class="input-group-append">
+                <button type="button" id="togglePassword" class="btn btn-secondary">
+                    <span id="passwordToggleText">Show</span>
+                </button>
+            </div>
+        </div>
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div class="form-group text-center">
+        <button type="submit" class="btn btn-primary btn-block">Save Changes</button>
+    </div>
+
+
+    @*<div class="form-group">
+        <input type="password" id="ConfirmPassword" class="form-control" required="required" placeholder="Confirm Password" />
+    </div>*@
+
+    <button type="submit" class="btn btn-primary" disabled="disabled">Save Changes</button>
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            var passwordField = $("#Password");
+            var passwordToggleText = $("#passwordToggleText");
+
+            $("#togglePassword").click(function () {
+                var passwordType = passwordField.attr("type");
+
+                if (passwordType === "password") {
+                    passwordField.attr("type", "text");
+                    passwordToggleText.text("Hide");
+                } else {
+                    passwordField.attr("type", "password");
+                    passwordToggleText.text("Show");
+                }
+            });
+        });
+    </script>
+}
+
